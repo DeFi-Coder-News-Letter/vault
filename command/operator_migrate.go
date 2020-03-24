@@ -207,7 +207,6 @@ func (c *OperatorMigrateCommand) migrateAll(ctx context.Context, from physical.B
 		existing, err := to.Get(ctx, path)
 		if existing != nil {
 			// Skipping because it's already there.
-			c.logger.Info("skipping already-present key", "path", path)
 			return nil
 		}
 
@@ -221,9 +220,11 @@ func (c *OperatorMigrateCommand) migrateAll(ctx context.Context, from physical.B
 			return nil
 		}
 
+		/*
 		if err := to.Put(ctx, entry); err != nil {
 			return errwrap.Wrapf("error writing entry: {{err}}", err)
 		}
+		 */
 		c.logger.Info("copied key", "path", path)
 		return nil
 	})
@@ -347,7 +348,7 @@ func parseStorage(result *migratorConfig, list *ast.ObjectList, name string) err
 // dfsScan will invoke cb with every key from source.
 // Keys will be traversed in lexicographic, depth-first order.
 func dfsScan(ctx context.Context, source physical.Backend, cb func(ctx context.Context, path string) error) error {
-	dfs := []string{"logical/28ecb704-fe43-594a-0e1d-b26cf3238f5f/key/"}
+	dfs := []string{""}
 
 	for l := len(dfs); l > 0; l = len(dfs) {
 		key := dfs[len(dfs)-1]
